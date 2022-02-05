@@ -3200,6 +3200,7 @@ bool retro_load_game(const struct retro_game_info *info)
                }
             }
          }
+		filestream_close(fd);
       }
 
       /* automatically try to load first disk if at least one file was added to disk interface from M3U file list */
