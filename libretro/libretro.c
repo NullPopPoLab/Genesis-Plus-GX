@@ -72,6 +72,7 @@
 
 #include <libretro.h>
 #include <streams/file_stream.h>
+#include <sys/stat.h>
 
 #include "libretro_core_options.h"
 
@@ -1278,15 +1279,19 @@ static void check_variables(bool first_run)
 
    if (!var.value || !strcmp(var.value, "per bios"))
    {
-     snprintf(CD_BRAM_EU, sizeof(CD_BRAM_EU), "%s%cscd_E.brm", save_dir, slash);
-     snprintf(CD_BRAM_US, sizeof(CD_BRAM_US), "%s%cscd_U.brm", save_dir, slash);
-     snprintf(CD_BRAM_JP, sizeof(CD_BRAM_JP), "%s%cscd_J.brm", save_dir, slash);
+     snprintf(CD_BRAM_EU, sizeof(CD_BRAM_EU), "%s%cgpgx_scd_E.brm", save_dir, slash);
+     snprintf(CD_BRAM_US, sizeof(CD_BRAM_US), "%s%cgpgx_scd_U.brm", save_dir, slash);
+     snprintf(CD_BRAM_JP, sizeof(CD_BRAM_JP), "%s%cgpgx_scd_J.brm", save_dir, slash);
    }
    else
    {
-     snprintf(CD_BRAM_EU, sizeof(CD_BRAM_EU), "%s%c%s.brm", save_dir, slash, g_rom_name);
-     snprintf(CD_BRAM_US, sizeof(CD_BRAM_US), "%s%c%s.brm", save_dir, slash, g_rom_name);
-     snprintf(CD_BRAM_JP, sizeof(CD_BRAM_JP), "%s%c%s.brm", save_dir, slash, g_rom_name);
+	char bramdir[256];
+	snprintf(bramdir, sizeof(bramdir), "%s%c%s", save_dir, slash, g_rom_name);
+	mkdir(bramdir,0777);
+
+     snprintf(CD_BRAM_EU, sizeof(CD_BRAM_EU), "%s%c%s%cgpgx_scd_E.brm", save_dir, slash, g_rom_name, slash);
+     snprintf(CD_BRAM_US, sizeof(CD_BRAM_US), "%s%c%s%cgpgx_scd_U.brm", save_dir, slash, g_rom_name, slash);
+     snprintf(CD_BRAM_JP, sizeof(CD_BRAM_JP), "%s%c%s%cgpgx_scd_J.brm", save_dir, slash, g_rom_name, slash);
    }
   }
 
